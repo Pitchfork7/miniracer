@@ -21,10 +21,18 @@
 // VRAM update buffer
 #include "vrambuf.h"
 //#link "vrambuf.c"
+#define MENU_TILE 0x1f
 
 #define PLAYER_TILE 0x01 
 #define PLAYER_PALETTE 0
 unsigned char pad;
+
+//menu vars
+
+unsigned char menusel = 3;
+
+
+
 
 //boss vars
 
@@ -59,7 +67,7 @@ const char PALETTE[32] = {
   0x00,0x10,0x20,0x00,	// background palette 2
   0x06,0x16,0x26,0x00,   // background palette 3
 
-  0x00,0x16,0x00,0x00,	// sprite palette 0
+  0x07,0x06,0x16,0x00,	// sprite palette 0
   0x00,0x37,0x25,0x00,	// sprite palette 1
   0x0D,0x2D,0x3A,0x00,	// sprite palette 2
   0x0D,0x27,0x2A	// sprite palette 3
@@ -67,9 +75,20 @@ const char PALETTE[32] = {
 
 
 void menu() {
-  vram_adr(NTADR_A(2,2));
-  vram_write("HELLO, WORLD!", 12);
-  
+  vram_adr(NTADR_A(10,2));
+  vram_write("EYGPT SANDS:", 12);
+  vram_adr(NTADR_A(4,7));
+  vram_write("MENU:", 5);
+  vram_adr(NTADR_A(4,8));
+  vram_fill(0x78, 10);
+  vram_adr(NTADR_A(4,22));
+  vram_fill(0x78, 10);
+  vram_adr(NTADR_A(6,11));
+  vram_write("PLAY", 4);
+  vram_adr(NTADR_A(6,15));
+  vram_write("SETTINGS", 8);
+  vram_adr(NTADR_A(6,19));
+  vram_write("COLOR", 5);
 }
 
 // setup PPU and tables
@@ -90,15 +109,41 @@ void main(void)
   // infinite loop
   while(1) {
     ppu_wait_nmi();
-    pad = pad_poll(0);
     oam_clear();
     
     
     switch (gamestate) {
       case 1:
-	break;
+        pad = pad_trigger(0);
+	if (pad & PAD_UP) {
+          menusel += 1;
+      	}
+      	if (pad & PAD_DOWN) {
+          menusel -= 1;
+      	}
+        if (menusel < 1) {
+         menusel = 3; 
+        }
+        if (menusel > 3) {
+         menusel = 1; 
+        }
+        
+        switch (menusel) {
+          case 3:
+            oam_spr(37, 87, MENU_TILE, PLAYER_PALETTE, 0);
+            break;
+          case 2:
+            oam_spr(37, 119, MENU_TILE, PLAYER_PALETTE, 0);
+            break;
+          case 1:
+            oam_spr(37, 151, MENU_TILE, PLAYER_PALETTE, 0);
+            break;
+            
+        }
+       break;
         
       case 2:  
+      pad = pad_poll(0);
       if (hasdash == 0) {
         dashtimer -= 1;
         if (dashtimer < 1) {
