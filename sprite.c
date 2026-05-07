@@ -25,6 +25,17 @@
 #define PLAYER_TILE 0x01 
 #define PLAYER_PALETTE 0
 unsigned char pad;
+
+//boss vars
+
+unsigned char boss = 0;
+unsigned char bossname[] = "";
+
+
+
+
+
+// player vars
 unsigned char x_pos = 128;
 unsigned char y_pos = 120;
 unsigned char speed = 1;
