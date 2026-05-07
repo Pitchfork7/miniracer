@@ -33,6 +33,8 @@ unsigned char hasdash = 1;
 unsigned char dashspeed = 30;
 unsigned char dashtimelength = 2;
 unsigned char dashtimer = 2 * 60;
+// 1: menu, 2: game
+unsigned char gamestate = 1;
 
 // 1: down, 2: Up, 3: left, 4: right
 unsigned char lastdir = 0;
@@ -73,58 +75,63 @@ void main(void)
     ppu_wait_nmi();
     pad = pad_poll(0);
     oam_clear();
-    if (hasdash == 0) {
-      dashtimer -= 1;
-      if (dashtimer < 1) {
-        dashtimer = dashtimelength * 60;
-        hasdash = 1;
-      }
-    }
-    if (playervis == 1) {
-    oam_spr(x_pos, y_pos, PLAYER_TILE, PLAYER_PALETTE, 0);
     
-    }
-    if (pad & PAD_UP) {
-      y_pos -= 1;
-      lastdir = 2;
-    }
-    if (pad & PAD_DOWN) {
-      y_pos += 1;
-      lastdir = 1;
-    }
-    if (pad & PAD_LEFT) {
-      x_pos -= 1;
-      lastdir = 3;
-    }
-    if (pad & PAD_RIGHT) {
-      x_pos += 1;
-      lastdir = 4;
-    }
-    if (pad & PAD_B) {
-      if (hasdash == 1) {
-        switch (lastdir) {
-          case 0: // nothing
-            break;
-          case 1: // down
-            y_pos += dashspeed;
-            hasdash = 0;
-            break;
-          case 2: // up
-            y_pos -= dashspeed;
-            hasdash = 0;
-            break;
-          case 3: // left
-            x_pos -= dashspeed;
-            hasdash = 0;
-            break;
-          case 4: //right
-            x_pos += dashspeed;
-            hasdash = 0;
-            break;
-            
-            
+    
+    if (gamestate == 2) {
+      if (hasdash == 0) {
+        dashtimer -= 1;
+        if (dashtimer < 1) {
+          dashtimer = dashtimelength * 60;
+          hasdash = 1;
         }
       }
+      if (playervis == 1) {
+      oam_spr(x_pos, y_pos, PLAYER_TILE, PLAYER_PALETTE, 0);
+
+      }
+      if (pad & PAD_UP) {
+        y_pos -= 1;
+        lastdir = 2;
+      }
+      if (pad & PAD_DOWN) {
+        y_pos += 1;
+        lastdir = 1;
+      }
+      if (pad & PAD_LEFT) {
+        x_pos -= 1;
+        lastdir = 3;
+      }
+      if (pad & PAD_RIGHT) {
+        x_pos += 1;
+        lastdir = 4;
+      }
+      if (pad & PAD_B) {
+        if (hasdash == 1) {
+          switch (lastdir) {
+            case 0: // nothing
+              break;
+            case 1: // down
+              y_pos += dashspeed;
+              hasdash = 0;
+              break;
+            case 2: // up
+              y_pos -= dashspeed;
+              hasdash = 0;
+              break;
+            case 3: // left
+              x_pos -= dashspeed;
+              hasdash = 0;
+              break;
+            case 4: //right
+              x_pos += dashspeed;
+              hasdash = 0;
+              break;
+
+
+            }
+          }
+        }
     }
+      
   }
 }
