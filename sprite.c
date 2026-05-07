@@ -88,7 +88,11 @@ void main(void)
     oam_clear();
     
     
-    if (gamestate == 2) {
+    switch (gamestate) {
+      case 1:
+	break;
+        
+      case 2:  
       if (hasdash == 0) {
         dashtimer -= 1;
         if (dashtimer < 1) {
@@ -137,8 +141,6 @@ void main(void)
               x_pos += dashspeed;
               hasdash = 0;
               break;
-
-
             }
           }
         }
