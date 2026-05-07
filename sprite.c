@@ -25,6 +25,8 @@
 
 #define PLAYER_TILE 0x01 
 #define PLAYER_PALETTE 0
+
+#define PALETTE1 0
 unsigned char pad;
 
 //menu vars
@@ -154,7 +156,7 @@ void main(void)
           case 1:
             oam_spr(37, 151, MENU_TILE, PLAYER_PALETTE, 0);
             if (pad & PAD_START) {
-          	clearscreen();
+          	pal_all(PALETTE1);
       	    }
             break;
             
