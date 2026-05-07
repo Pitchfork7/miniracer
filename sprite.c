@@ -29,6 +29,10 @@ unsigned char x_pos = 128;
 unsigned char y_pos = 120;
 unsigned char speed = 1;
 unsigned char playervis = 1;
+unsigned char hasdash = 1;
+unsigned char dashspeed = 50;
+// 1: down, 2: Up, 3: left, 4: right
+unsigned char lastdir = 0;
 
 /*{pal:"nes",layout:"nes"}*/
 const char PALETTE[32] = { 
@@ -72,15 +76,45 @@ void main(void)
     }
     if (pad & PAD_UP) {
       y_pos -= 1;
+      lastdir = 2;
     }
     if (pad & PAD_DOWN) {
       y_pos += 1;
+      lastdir = 1;
     }
     if (pad & PAD_LEFT) {
       x_pos -= 1;
+      lastdir = 3;
     }
     if (pad & PAD_RIGHT) {
       x_pos += 1;
+      lastdir = 4;
+    }
+    if (pad & PAD_B) {
+      if (hasdash == 1) {
+        switch (lastdir) {
+          case 0: // nothing
+            break;
+          case 1: // down
+            y_pos += dashspeed;
+            hasdash = 0;
+            break;
+          case 2: // up
+            y_pos -= dashspeed;
+            hasdash = 0;
+            break;
+          case 3: // left
+            x_pos -= dashspeed;
+            hasdash = 0;
+            break;
+          case 4: //right
+            x_pos += dashspeed;
+            hasdash = 0;
+            break;
+            
+            
+        }
+      }
     }
   }
 }
