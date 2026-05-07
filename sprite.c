@@ -36,6 +36,7 @@ unsigned char menusel = 3;
 
 
 
+
 //boss vars
 
 unsigned char boss = 0;
@@ -67,9 +68,9 @@ const char PALETTE[32] = {
   0x07,0x00,0x27,0x00,	// background palette 0
   0x1C,0x20,0x2C,0x00,	// background palette 1
   0x00,0x10,0x20,0x00,	// background palette 2
-  0x06,0x16,0x26,0x00,   // background palette 3
+  0x07,0x16,0x26,0x00,   // background palette 3
 
-  0x07,0x06,0x16,0x00,	// sprite palette 0
+  0x07,0x16,0x16,0x00,	// sprite palette 0
   0x00,0x37,0x25,0x00,	// sprite palette 1
   0x0D,0x2D,0x3A,0x00,	// sprite palette 2
   0x0D,0x27,0x2A	// sprite palette 3
@@ -99,7 +100,7 @@ void menu() {
   vram_adr(NTADR_A(6,15));
   vram_write("SETTINGS", 8);
   vram_adr(NTADR_A(6,19));
-  vram_write("COLOR", 5);
+  vram_write("SOUND", 5);
 }
 
 // setup PPU and tables
@@ -156,7 +157,7 @@ void main(void)
           case 1:
             oam_spr(37, 151, MENU_TILE, PLAYER_PALETTE, 0);
             if (pad & PAD_START) {
-          	pal_all(PALETTE1);
+          	break;
       	    }
             break;
             
