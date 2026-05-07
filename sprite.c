@@ -73,6 +73,15 @@ const char PALETTE[32] = {
   0x0D,0x27,0x2A	// sprite palette 3
 };
 
+void clearscreen() {
+  ppu_off();      // Must turn PPU off to write large amounts of VRAM
+  vram_adr(0x2000);
+  vram_fill(0x00, 1024); // Fill with blank tile
+  vram_adr(0x2400);      // Clear the second nametable too if using mirroring
+  vram_fill(0x00, 1024);
+  oam_clear();    // Hide all sprites
+  ppu_on_all();   // Turn it back on
+}
 
 void menu() {
   vram_adr(NTADR_A(10,2));
@@ -131,12 +140,22 @@ void main(void)
         switch (menusel) {
           case 3:
             oam_spr(37, 87, MENU_TILE, PLAYER_PALETTE, 0);
+            if (pad & PAD_START) {
+                gamestate = 2;
+          	clearscreen();
+      	    }
             break;
           case 2:
             oam_spr(37, 119, MENU_TILE, PLAYER_PALETTE, 0);
+            if (pad & PAD_START) {
+          	clearscreen();
+      	    }
             break;
           case 1:
             oam_spr(37, 151, MENU_TILE, PLAYER_PALETTE, 0);
+            if (pad & PAD_START) {
+          	clearscreen();
+      	    }
             break;
             
         }
