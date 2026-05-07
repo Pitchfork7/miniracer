@@ -65,6 +65,13 @@ const char PALETTE[32] = {
   0x0D,0x27,0x2A	// sprite palette 3
 };
 
+
+void menu() {
+  vram_adr(NTADR_A(2,2));
+  vram_write("HELLO, WORLD!", 12);
+  
+}
+
 // setup PPU and tables
 void setup_graphics() {
   // clear sprites
@@ -77,8 +84,7 @@ void main(void)
 {
   setup_graphics();
   // draw message  
-  vram_adr(NTADR_A(2,2));
-  vram_write("HELLO, WORLD!", 12);
+  menu();
   // enable rendering
   ppu_on_all();
   // infinite loop
